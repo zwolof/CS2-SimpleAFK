@@ -43,22 +43,12 @@ public class AFKManager : BasePlugin
 	{
 		var player = Utilities.GetPlayerFromSlot(playerSlot);
 
-		if (player == null)
-		{
-			return;
-		}
-
 		AddClientEntry(player);
 	}
 
 	private void OnClientDisconnectPost(int playerSlot)
 	{
 		var player = Utilities.GetPlayerFromSlot(playerSlot);
-
-		if (player == null)
-		{
-			return;
-		}
 
 		if (!_AFKPlayers.ContainsKey(player))
 		{
@@ -151,7 +141,7 @@ public class AFKManager : BasePlugin
 
 	private void HandleAFK(CCSPlayerController player)
 	{
-		if (player == null || Helpers.IsWarmup())
+		if (Helpers.IsWarmup())
 		{
 			return;
 		}
