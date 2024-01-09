@@ -59,12 +59,12 @@ public partial class AFKManager : BasePlugin
 	{
 		var player = Utilities.GetPlayerFromSlot(playerSlot);
 
-		if(player == null)
+		if (player == null)
 		{
 			return;
 		}
 
-		if(!_AFKPlayers.ContainsKey(player))
+		if (!_AFKPlayers.ContainsKey(player))
 		{
 			return;
 		}
@@ -101,14 +101,14 @@ public partial class AFKManager : BasePlugin
 	{
 		var players = Utilities.GetPlayers();
 
-		if(!players.Any())
+		if (!players.Any())
 		{
 			return HookResult.Continue;
 		}
 
-		foreach(var player in players)
+		foreach (var player in players)
 		{
-			if(!_AFKPlayers.ContainsKey(player))
+			if (!_AFKPlayers.ContainsKey(player))
 			{
 				AddClientEntry(player);
 			}
@@ -122,28 +122,28 @@ public partial class AFKManager : BasePlugin
 	{
 		var players = Utilities.GetPlayers();
 
-		if(!players.Any())
+		if (!players.Any())
 		{
 			return;
 		}
 
-		foreach(var player in players)
+		foreach (var player in players)
 		{
-			if(player.PlayerPawn.Value!.MovementServices is null)
+			if (player.PlayerPawn.Value!.MovementServices is null)
 			{
 				continue;
 			}
 
-			if(!_AFKPlayers.ContainsKey(player))
+			if (!_AFKPlayers.ContainsKey(player))
 			{
 				AddClientEntry(player);
 			}
 
-			if(_AFKPlayers[player].IsAFK && player.PawnIsAlive && !player.IsBot)
+			if (_AFKPlayers[player].IsAFK && player.PawnIsAlive && !player.IsBot)
 			{
-				foreach(var btnState in player.PlayerPawn.Value.MovementServices.Buttons.ButtonStates)
+				foreach (var btnState in player.PlayerPawn.Value.MovementServices.Buttons.ButtonStates)
 				{
-					if(btnState > 0)
+					if (btnState > 0)
 					{
 						_AFKPlayers[player].Time = 0;
 						_AFKPlayers[player].IsAFK = false;
@@ -156,19 +156,19 @@ public partial class AFKManager : BasePlugin
 
 	public void HandleAFK(CCSPlayerController player)
 	{
-		if(player == null || Helpers.IsWarmup())
+		if (player == null || Helpers.IsWarmup())
 		{
 			return;
 		}
 
-		if(!_AFKPlayers.ContainsKey(player))
+		if (!_AFKPlayers.ContainsKey(player))
 		{
 			AddClientEntry(player);
 		}
 
-		if(player.PawnIsAlive && !player.IsBot && _AFKPlayers[player].IsAFK)
+		if (player.PawnIsAlive && !player.IsBot && _AFKPlayers[player].IsAFK)
 		{
-			if(--_AFKPlayers[player].Time > 0)
+			if (--_AFKPlayers[player].Time > 0)
 			{
 				// kill timer?
 				return;
@@ -176,7 +176,7 @@ public partial class AFKManager : BasePlugin
 			player.CommitSuicide(true, true);
 			_AFKPlayers[player].Limit++;
 
-			if(_AFKPlayers[player].Limit >= 3)
+			if (_AFKPlayers[player].Limit >= 3)
 			{
 				Helpers.ChatMessage(player, "You have been kicked for being AFK too long.");
 				// kick player
