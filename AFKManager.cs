@@ -1,7 +1,7 @@
 ﻿using CounterStrikeSharp.API;
 using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Core.Attributes;
-
+using CounterStrikeSharp.API.Core.Attributes.Registration;
 using CSSTimer = CounterStrikeSharp.API.Modules.Timers.Timer;
 
 namespace AFKManager;
@@ -20,7 +20,7 @@ public sealed class AFKData
 }
 
 [MinimumApiVersion(110)]
-public partial class AFKManager : BasePlugin
+public class AFKManager : BasePlugin
 {
 	public override string ModuleName => "AFKManager";
 	public override string ModuleAuthor => "zwolof";
@@ -34,16 +34,12 @@ public partial class AFKManager : BasePlugin
 
 	public override void Load(bool hotReload)
 	{	
-		// Events
-		RegisterEventHandler<EventRoundFreezeEnd>(OnFreezeTimeEnd);
-
-		// Listeners
 		RegisterListener<Listeners.OnTick>(OnTick);
 		RegisterListener<Listeners.OnClientPutInServer>(OnClientPutInServer);
 		RegisterListener<Listeners.OnClientDisconnectPost>(OnClientDisconnectPost);
 	}
 
-	public void OnClientPutInServer(int playerSlot)
+	private void OnClientPutInServer(int playerSlot)
 	{
 		var player = Utilities.GetPlayerFromSlot(playerSlot);
 
@@ -55,7 +51,7 @@ public partial class AFKManager : BasePlugin
 		AddClientEntry(player);
 	}
 
-	public void OnClientDisconnectPost(int playerSlot)
+	private void OnClientDisconnectPost(int playerSlot)
 	{
 		var player = Utilities.GetPlayerFromSlot(playerSlot);
 
@@ -74,11 +70,11 @@ public partial class AFKManager : BasePlugin
 		_AFKPlayers.Remove(player);
 	}
 
-	public bool AddClientEntry(CCSPlayerController player)
+	private void AddClientEntry(CCSPlayerController player)
 	{
 		if (_AFKPlayers.ContainsKey(player))
 		{
-			return false;
+			return;
 		}
 
 		_AFKPlayers.Add(
@@ -93,10 +89,9 @@ public partial class AFKManager : BasePlugin
 				})
 			}
 		);
-
-		return true;
 	}
 
+	[GameEventHandler]
 	public HookResult OnFreezeTimeEnd(EventRoundFreezeEnd @event, GameEventInfo info)
 	{
 		var players = Utilities.GetPlayers();
@@ -118,7 +113,7 @@ public partial class AFKManager : BasePlugin
 		return HookResult.Continue;
 	}
 
-	public void OnTick()
+	private void OnTick()
 	{
 		var players = Utilities.GetPlayers();
 
@@ -154,7 +149,7 @@ public partial class AFKManager : BasePlugin
 		}
 	}
 
-	public void HandleAFK(CCSPlayerController player)
+	private void HandleAFK(CCSPlayerController player)
 	{
 		if (player == null || Helpers.IsWarmup())
 		{
