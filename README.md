@@ -1,8 +1,7 @@
-# CS2-Autoplant
- The Autoplant plugin is a plugin for CounterStrikeSharp that automatically plants the bomb after freezetime ends.
+# CS2-SimpleAFK
+ The SimpleAFK plugin is a plugin for CounterStrikeSharp that handles AFK players. 
 
 # Features
- - [x] Automatically plants the bomb after freezetime ends.
  - [ ] Translations. (Waiting for CounterStrikeSharp support)
 
 # Installation
