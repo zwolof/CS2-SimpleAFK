@@ -8,7 +8,7 @@ namespace AFKManager;
 
 public sealed class Config 
 {
-	public const string CHAT_PREFIX = " \u000fAFKManager \u0010›\b ";
+	public const string ChatPrefix = " \u000fAFKManager \u0010›\b ";
 }
 
 public sealed class AFKData

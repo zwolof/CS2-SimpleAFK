@@ -4,52 +4,56 @@ using CounterStrikeSharp.API.Modules.Utils;
 
 namespace AFKManager;
 
-public sealed class Helpers {
+public static class Helpers
+{
 	public static bool IsPlayerValid(CCSPlayerController player)
 	{
-		if (player is null || !player.IsValid || !player.PlayerPawn.IsValid || player.IsBot || player.IsHLTV)
+		return player is
 		{
-			return false;
-		}
-		return true;
+			IsValid: true, 
+			PlayerPawn.IsValid: true, 
+			IsBot: false,
+			IsHLTV: false
+		};
 	}
-
+	
 	public static void ChatMessageAll(string message)
 	{
-		Server.PrintToChatAll(Config.CHAT_PREFIX + message);
+		Server.PrintToChatAll(Config.ChatPrefix + message);
 	}
 
 	public static void ChatMessage(CCSPlayerController player, string message)
 	{
-		player.PrintToChat(Config.CHAT_PREFIX + message);
-	}
-
-	// Credits: killstr3ak
-	public static CCSGameRules GetGameRules()
-	{
-		return Utilities.FindAllEntitiesByDesignerName<CCSGameRulesProxy>("cs_gamerules").First().GameRules!;
+		player.PrintToChat(Config.ChatPrefix + message);
 	}
 
 	public static bool IsWarmup()
 	{
-		var GameRules = GetGameRules();
+		var gameRules = GetGameRules();
 
-		if(GameRules is null)
+		if (gameRules == null)
 		{
 			return false;
 		}
 
-		return GameRules.WarmupPeriod;
+		return gameRules.WarmupPeriod;
 	}
 
 	public static bool IsPlayerOnGround(CCSPlayerController player)
 	{
-		if(player.PlayerPawn.Value == null) 
+		if (player.PlayerPawn.Value == null) 
 		{
 			return false;
 		}
+		
 		var flags = (PlayerFlags)player.PlayerPawn.Value.Flags;
 
 		return flags.HasFlag(PlayerFlags.FL_ONGROUND);
+	}
+	
+	// Credits: killstr3ak
+	private static CCSGameRules? GetGameRules()
+	{
+		return Utilities.FindAllEntitiesByDesignerName<CCSGameRulesProxy>("cs_gamerules").First().GameRules;
 	}
 }
