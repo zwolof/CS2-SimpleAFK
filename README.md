@@ -1,4 +1,4 @@
-# CS2-SimpleAFK
+# CS2-SimpleAFK - (unfinished, wait for release)
  The SimpleAFK plugin is a plugin for CounterStrikeSharp that handles AFK players. 
 
 # Features
